@@ -14,9 +14,12 @@ class ExpensesApp extends StatelessWidget {
     return MaterialApp(
       home: const MyHomePage(),
       theme: ThemeData(
+        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blueGrey,
+          seedColor: Colors.indigo,
+          brightness: Brightness.light,
         ),
+        fontFamily: 'Quicksand-Bold',
       ),
       debugShowCheckedModeBanner: false,
     );
@@ -31,14 +34,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _transactions = [
-    Transaction(
-      id: 't1',
-      title: 'Novo Tenis de corrida',
-      value: 310.76,
-      date: DateTime.now(),
-    ),
-  ];
+  final List<Transaction> _transactions = [];
 
   _addTransaction(String title, double value) {
     final newTransaction = Transaction(
@@ -71,6 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text(
           'Despesas Pessoais',
+          style: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 20,
+            fontWeight: FontWeight.w900,
+          ),
         ),
         actions: [
           IconButton(

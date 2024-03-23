@@ -1,7 +1,8 @@
 import 'package:expenses/components/adaptative_button.dart';
 import 'package:expenses/components/adaptative_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+import 'adaptative_date_picker.dart';
 
 class TransactionForm extends StatefulWidget {
   final void Function(String, double, DateTime) onSubmit;
@@ -19,30 +20,32 @@ class _TransactionFormState extends State<TransactionForm> {
 
   DateTime? _selectedDate = DateTime.now();
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   _submitForm() {
     final title = _titleController.text;
     final value = double.tryParse(_valueController.text) ?? 0.0;
     if (title.isEmpty || value <= 0 || _selectedDate == null) {
       return;
     }
-    widget.onSubmit(title, value, _selectedDate as DateTime);
-  }
-
-  _showDatePicker() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2010),
-      lastDate: DateTime.now(),
-    ).then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
-
-      setState(() {
-        _selectedDate = pickedDate;
-      });
-    });
+    widget.onSubmit(
+      title,
+      value,
+      _selectedDate as DateTime,
+    );
   }
 
   @override
@@ -69,27 +72,14 @@ class _TransactionFormState extends State<TransactionForm> {
                 controller: _valueController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 onSubmitted: (_) => _submitForm(),
-                
               ),
-              SizedBox(
-                height: 70,
-                child: Row(children: [
-                  Expanded(
-                    child: Text(
-                      _selectedDate == null
-                          ? 'Nenhuma data selecionada!'
-                          : 'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate as DateTime)}',
-                    ),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(foregroundColor: Colors.indigo),
-                    onPressed: _showDatePicker,
-                    child: const Text(
-                      'Selecionar Data',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ]),
+              AdaptativeDatePicker(
+                selectedDate: _selectedDate as DateTime,
+                onDateChanged: (newDate) {
+                  setState(() {
+                    _selectedDate = newDate;
+                  });
+                },
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
